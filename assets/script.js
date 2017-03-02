@@ -49,32 +49,40 @@ function Tile(row) {
     this.index = row.tilesArray.length - 1;
 
     //Checks for a click on a tile
-    //This is assigned to tile so its flag function can be called in the event handler
+    //"This" is assigned to tile so it can be accessed in the event handlers
+
+
+    this.flag = function (event) {
+        event.preventDefault();
+        if (this.textContent == '')
+            this.textContent = "F";
+        else
+            this.textContent = '';
+    }
+
+
+    this.click = function (event) {
+        // Clicked tiles will not listen for flag or click events
+        console.log(this);
+        this.removeEventListener('contextmenu', tile.flag);
+        this.removeEventListener('click', tile.click);
+        tile.clicked = true;
+        console.log(tile);
+
+        if (tile.mine)
+            alert("boom");
+    }
+
     var tile = this;
     this.element.addEventListener('contextmenu', tile.flag, false);
-    //Event Listener passes on the object if the click method is called through a function
-    this.callClick = function (){tile.click(event)}
-    this.element.addEventListener('click', tile.callClick, false);
+    this.element.addEventListener('click', tile.click, false);
+
 }
 
 // Sets the mine flags
-Tile.prototype.flag = function (event) {
-    event.preventDefault();
-    if (this.textContent == '')
-        this.textContent = "F";
-    else
-        this.textContent = '';
-}
 
-Tile.prototype.click = function (event) {
-    var tile = this;
-    this.element.removeEventListener('click', tile.callClick, false);
-    this.clicked = true;
-    console.log(this)
 
-    if (this.mine)
-        alert("boom");
-}
+
 
 function addMines() {
     var minesLeft = totalMines;
