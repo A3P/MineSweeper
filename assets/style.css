@@ -10,3 +10,7 @@ td {
     padding: 0;
     text-align: center;
 }
+
+.mine {
+    background-color: red;
+}

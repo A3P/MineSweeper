@@ -2,6 +2,7 @@ var rows = 10;
 var rowsArray = [];
 var tiles = 10;
 var remainingTiles = rows * tiles;
+var totalMines = 10;
 
 document.addEventListener("DOMContentLoaded", startGame);
 
@@ -16,6 +17,7 @@ function startGame() {
         new Row();
 
     console.log(rowsArray);
+    addMines();
 }
 
 // Creates the Row object
@@ -33,6 +35,7 @@ function Row() {
 function Tile(row) {
     this.element = document.createElement('td');
     row.element.appendChild(this.element);
+    this.mine = false;
 
     //Add the tile to an array of that row
     row.tilesArray.push(this);
@@ -50,4 +53,20 @@ Tile.prototype.flag = function (event) {
         this.textContent = "F";
     else
         this.textContent = '';
+}
+
+function addMines() {
+    var minesLeft = totalMines;
+    var tile;
+
+    while(minesLeft != 0) {
+        console.log(tile);
+        tile = rowsArray[Math.floor(Math.random() * rows)].tilesArray[Math.floor(Math.random() * tiles)];
+        if(!tile.mine) {
+            tile.mine = true;
+            minesLeft--;
+            //testing purposes
+            tile.element.className = "mine";
+        }
+    }
 }
