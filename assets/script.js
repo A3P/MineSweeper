@@ -1,12 +1,12 @@
 //A javascript implementation of Mine Sweeper
 //By Amir Afshar
 
-var rows = 10;
+var totalRows = 10;
 var rowsArray = [];
-var tiles = 10;
-var remainingTiles = rows * tiles;
-var totalMines = 10;
-//Determines which tiles
+var tilesPerRow = 10;
+var remainingTiles = totalRows * tilesPerRow;
+var totalMines = 20;
+// Determines which tiles to click on next when the player clicks on an empty tile
 var EmptyTileChain = []
 
 document.addEventListener("DOMContentLoaded", startGame);
@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", startGame);
 
 
 
-// Restarts the gameboard and sets up all tiles
+// Restarts the gameboard and sets up all tilesPerRow
 function startGame() {
     var board = document.getElementById("board");
-    for (var i = 0; i < rows; i++)
+    for (var i = 0; i < totalRows; i++)
         new Row();
 
     console.log(rowsArray);
@@ -30,60 +30,82 @@ function Row() {
     this.element = document.createElement('tr');
     board.appendChild(this.element);
     this.tilesArray = [];
-    for(var i = 0; i < tiles; i++) {
+    rowsArray.push(this);
+
+    for(var i = 0; i < tilesPerRow; i++) {
         new Tile(this);
     }
-    rowsArray.push(this);
     this.index = rowsArray.length - 1;
 }
 
 // Creates the Tile object
 function Tile(row) {
+
+    var tile = this;
     this.element = document.createElement('td');
     row.element.appendChild(this.element);
+    // the number of mines adjacent to this tile
+    this.adjacentMines = 0;
     this.mine = false;
     this.clicked = false;
-
     //Add the tile to an array of that row
     row.tilesArray.push(this);
+    this.row = row
     this.index = row.tilesArray.length - 1;
-
-    //Checks for a click on a tile
-    //"This" is assigned to tile so it can be accessed in the event handlers
+    this.rowIndex = rowsArray.length -1;
 
 
     this.flag = function (event) {
         event.preventDefault();
-        if (this.textContent == '')
+        if (this.textContent == '') {
             this.textContent = "F";
-        else
+            this.removeEventListener('click', tile.click);
+        } else {
             this.textContent = '';
+            this.addEventListener('click', tile.click, false);
+        }
     }
 
 
     this.click = function (event) {
-        // Clicked tiles will not listen for flag or click events
-        console.log(this);
+        // Clicked tilesPerRow will not listen for flag or click events
         this.removeEventListener('contextmenu', tile.flag);
         this.removeEventListener('click', tile.click);
         tile.clicked = true;
         console.log(tile);
 
-        if (tile.mine)
+        if (tile.mine) {
             alert("boom");
+        } else {
+            this.textContent = tile.adjacentMines.toString();
+        }
     }
 
-    var tile = this;
+    // The event listeners for the tile
     this.element.addEventListener('contextmenu', tile.flag, false);
     this.element.addEventListener('click', tile.click, false);
-
 }
 
-// Sets the mine flags
+// Checks for neighbouring tilesPerRow of a mine and increments their mine count
+Tile.prototype.proximityCount = function() {
+
+    for (var rowOffset = -1; rowOffset < 2; rowOffset++) {
+        // Checks if the current row index is within bounds before adding the Count
+        if (this.rowIndex+rowOffset >= 0 && this.rowIndex+rowOffset < totalRows) {
+            var row = rowsArray[this.rowIndex + rowOffset];
+
+            for (var tileOffset = -1; tileOffset < 2; tileOffset++) {
+                // Checks if the tile is within bounds
+                if (this.index+tileOffset >= 0 && this.index+tileOffset < tilesPerRow) {
+                    row.tilesArray[this.index+tileOffset].adjacentMines++;
+                }
+            }
+        }
+    }
+}
 
 
-
-
+// Adds mines randomly to the board
 function addMines() {
     var minesLeft = totalMines;
     var tile;
@@ -92,13 +114,14 @@ function addMines() {
         //testing
         console.log(tile);
 
-        //Randomly places mines in tiles that do not already have one
-        tile = rowsArray[Math.floor(Math.random() * rows)].tilesArray[Math.floor(Math.random() * tiles)];
+        //Randomly places mines in tiles that do not already have a mine
+        tile = rowsArray[Math.floor(Math.random() * totalRows)].tilesArray[Math.floor(Math.random() * tilesPerRow)];
         if(!tile.mine) {
             tile.mine = true;
             minesLeft--;
+            tile.proximityCount();
             //testing purposes
-            tile.element.className = "mine";
+            //tile.element.className = "mine";
         }
     }
 }
