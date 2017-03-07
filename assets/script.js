@@ -1,11 +1,11 @@
 //A javascript implementation of Mine Sweeper
 //By Amir Afshar
 
-var totalRows = 10;
+var totalRows = 9;
 var rowsArray = [];
-var tilesPerRow = 10;
+var tilesPerRow = 9;
 var remainingTiles = totalRows * tilesPerRow;
-var totalMines = 20;
+var totalMines = 10;
 // Determines which tiles to click on next when the player clicks on an empty tile
 var EmptyTileChain = []
 
@@ -68,16 +68,18 @@ function Tile(row) {
 
 
     this.click = function (event) {
-        // Clicked tilesPerRow will not listen for flag or click events
-        this.removeEventListener('contextmenu', tile.flag);
-        this.removeEventListener('click', tile.click);
+        // Clicked tiles will not listen for flag or click events
+        tile.element.removeEventListener('contextmenu', tile.flag);
+        tile.element.removeEventListener('click', tile.click);
         tile.clicked = true;
-        console.log(tile);
 
         if (tile.mine) {
             alert("boom");
+        } else if (tile.adjacentMines == 0) {
+            tile.element.textContent = tile.adjacentMines.toString();
+            clickAdjacentTiles(tile);
         } else {
-            this.textContent = tile.adjacentMines.toString();
+            tile.element.textContent = tile.adjacentMines.toString();
         }
     }
 
@@ -86,7 +88,25 @@ function Tile(row) {
     this.element.addEventListener('click', tile.click, false);
 }
 
-// Checks for neighbouring tilesPerRow of a mine and increments their mine count
+function clickAdjacentTiles(tile) {
+
+    for (var rowOffset = -1; rowOffset < 2; rowOffset++) {
+        // Checks if the current row index is within bounds before adding the Count
+        if (tile.rowIndex+rowOffset >= 0 && tile.rowIndex+rowOffset < totalRows) {
+            var row = rowsArray[tile.rowIndex + rowOffset];
+            for (var tileOffset = -1; tileOffset < 2; tileOffset++) {
+                // Checks if the tile is within bounds
+                if (tile.index+tileOffset >= 0 && tile.index+tileOffset < tilesPerRow &&
+                    row.tilesArray[tile.index+tileOffset].clicked === false) {
+
+                    row.tilesArray[tile.index+tileOffset].click();
+                }
+            }
+        }
+    }
+}
+
+// Checks for neighbouring tiles of a mine and increments their mine count
 Tile.prototype.proximityCount = function() {
 
     for (var rowOffset = -1; rowOffset < 2; rowOffset++) {
