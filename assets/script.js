@@ -6,6 +6,11 @@ var rowsArray = [];
 var tilesPerRow = 9;
 var remainingTiles = totalRows * tilesPerRow;
 var totalMines = 10;
+
+var flag = document.createElement('img');
+flag.src = 'assets/flag.png';
+flag.alt = 'flag';
+flag.className = 'flag';
 // Determines which tiles to click on next when the player clicks on an empty tile
 var EmptyTileChain = []
 
@@ -57,11 +62,12 @@ function Tile(row) {
 
     this.flag = function (event) {
         event.preventDefault();
-        if (this.textContent == '') {
-            this.textContent = "F";
+        if (!this.firstChild) {
+            var duplicate = flag.cloneNode();
+            this.appendChild(duplicate);
             this.removeEventListener('click', tile.click);
         } else {
-            this.textContent = '';
+            this.removeChild(this.firstChild);
             this.addEventListener('click', tile.click, false);
         }
     }

@@ -1,5 +1,6 @@
 table {
     border-spacing: 0px;
+    table-layout: fixed;
 }
 
 td {
@@ -10,8 +11,14 @@ td {
     padding: 0;
     text-align: center;
     background-color: grey;
+    table-layout: fixed;
 }
 
 .mine {
     background-color: red;
+}
+
+.flag {
+    width: 1em;
+    height: 1em;
 }
