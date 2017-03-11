@@ -1,11 +1,13 @@
 //A javascript implementation of Mine Sweeper
 //By Amir Afshar
 
-var totalRows = 9;
+var totalRows = 10;
 var rowsArray = [];
-var tilesPerRow = 9;
+var tilesPerRow = 10;
 var remainingTiles = totalRows * tilesPerRow;
 var totalMines = 10;
+var clickedClass = 'clicked';
+var countClass = 'count'
 
 var flag = document.createElement('img');
 flag.src = 'assets/flag.png';
@@ -63,6 +65,7 @@ function Tile(row) {
     this.flag = function (event) {
         event.preventDefault();
         if (!this.firstChild) {
+            //The flags have to be duplicated for each tile
             var duplicate = flag.cloneNode();
             this.appendChild(duplicate);
             this.removeEventListener('click', tile.click);
@@ -80,11 +83,13 @@ function Tile(row) {
         tile.clicked = true;
 
         if (tile.mine) {
-            alert("boom");
+            //alert("boom");
+            tile.element.className = 'mine'
         } else if (tile.adjacentMines == 0) {
-            tile.element.textContent = tile.adjacentMines.toString();
+            tile.element.className = clickedClass;
             clickAdjacentTiles(tile);
         } else {
+            tile.element.className = clickedClass + ' ' + countClass + tile.adjacentMines.toString();
             tile.element.textContent = tile.adjacentMines.toString();
         }
     }
@@ -101,9 +106,11 @@ function clickAdjacentTiles(tile) {
         if (tile.rowIndex+rowOffset >= 0 && tile.rowIndex+rowOffset < totalRows) {
             var row = rowsArray[tile.rowIndex + rowOffset];
             for (var tileOffset = -1; tileOffset < 2; tileOffset++) {
-                // Checks if the tile is within bounds
+                // Checks if the tile is within bounds and is not yet clicked
                 if (tile.index+tileOffset >= 0 && tile.index+tileOffset < tilesPerRow &&
                     row.tilesArray[tile.index+tileOffset].clicked === false) {
+                    if (tile.element.firstChild)
+                        tile.element.removeChild(tile.element.firstChild);
 
                     row.tilesArray[tile.index+tileOffset].click();
                 }

@@ -1,6 +1,23 @@
+body {
+    font-family: 'VT323', monospace;
+    text-align: center;
+    /*font-size: 1.5em;*/
+    background-color: black;
+}
+
+h1 {
+    font-size: 4em;
+    color: #eaeaea;
+    letter-spacing: 0.1em;
+}
+
+
 table {
-    border-spacing: 0px;
+    /*border-spacing: 0px;*/
     table-layout: fixed;
+    font-weight: bold;
+    margin: 0 auto;
+    font-size: 2em;
 }
 
 td {
@@ -10,15 +27,64 @@ td {
     margin: 0;
     padding: 0;
     text-align: center;
-    background-color: grey;
+    background-color: #808080;
     table-layout: fixed;
+    overflow: hidden;
+
 }
 
 .mine {
+    animation: 2s turnRed;
     background-color: red;
 }
 
 .flag {
     width: 1em;
     height: 1em;
+}
+
+.clicked {
+    background-color: #eaeaea;
+}
+
+@keyframes turnRed {
+    from {
+        background-color: #b1b1b1;
+    }
+
+    to {
+        background-color: red;
+    }
+}
+
+.count1 {
+    color: #215B5B;
+}
+
+.count2 {
+    color: #1ec71e;
+}
+
+.count3 {
+    color: #986337;
+}
+
+.count4 {
+    color: #983737;
+}
+
+.count5 {
+    color: ;
+}
+
+.count6 {
+    color: ;
+}
+
+.count7 {
+    color: ;
+}
+
+.count8 {
+    color: ;
 }
