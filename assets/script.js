@@ -1,22 +1,31 @@
 //A javascript implementation of Mine Sweeper
 //By Amir Afshar
 
-var totalRows = 10;
-var rowsArray = [];
-var tilesPerRow = 10;
-var remainingTiles = totalRows * tilesPerRow;
-var totalMines = 10;
-var clickedClass = 'clicked';
-var countClass = 'count'
 
-var flag = document.createElement('img');
-flag.src = 'assets/flag.png';
-flag.alt = 'flag';
-flag.className = 'flag';
-// Determines which tiles to click on next when the player clicks on an empty tile
-var EmptyTileChain = []
+document.addEventListener("DOMContentLoaded", function() {
+    board = document.getElementById("board");
+    totalRows = 9;
+    tilesPerRow = 9;
+    totalMines = 10;
+    clickedClass = 'clicked';
+    countClass = 'count';
 
-document.addEventListener("DOMContentLoaded", startGame);
+    flag = document.createElement('img');
+    flag.src = 'assets/flag.png';
+    flag.alt = 'flag';
+    flag.className = 'flag';
+
+    mine = document.createElement('img');
+    mine.src = 'assets/mine.png';
+    mine.alt = 'mine';
+
+    document.querySelector('button').addEventListener("click", startGame);
+});
+
+
+
+
+
 
 
 
@@ -24,7 +33,16 @@ document.addEventListener("DOMContentLoaded", startGame);
 
 // Restarts the gameboard and sets up all tilesPerRow
 function startGame() {
-    var board = document.getElementById("board");
+
+    //Array content is reset at the start of every game
+    rowsArray = [];
+    board.innerHTML = '';
+
+    // totalRows = parseInt(document.getElementById('height').value);
+    // tilesPerRow = parseInt(document.getElementById('width').value);
+    // totalMines = parseInt(document.getElementById('mines').value);
+
+
     for (var i = 0; i < totalRows; i++)
         new Row();
 
@@ -85,6 +103,7 @@ function Tile(row) {
         if (tile.mine) {
             //alert("boom");
             tile.element.className = 'mine'
+            tile.element.appendChild(mine.cloneNode());
         } else if (tile.adjacentMines == 0) {
             tile.element.className = clickedClass;
             clickAdjacentTiles(tile);

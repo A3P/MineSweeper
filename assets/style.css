@@ -1,7 +1,6 @@
 body {
     font-family: 'VT323', monospace;
     text-align: center;
-    /*font-size: 1.5em;*/
     background-color: black;
 }
 
@@ -15,46 +14,51 @@ h1 {
 table {
     /*border-spacing: 0px;*/
     table-layout: fixed;
+    width: 50px;
+    max-width: 50px;
+    height: 50px;
+    max-height: 50px;
     font-weight: bold;
     margin: 0 auto;
     font-size: 2em;
 }
 
+tr {
+    table-layout: fixed;
+}
+
 td {
-    height: 1.5em;
-    width: 1.5em;
+    table-layout: fixed;
+    height: 50px;
+    max-height: 50px;
+    width: 50px;
+    max-width: 50px;
     border: 1px solid black;
     margin: 0;
     padding: 0;
     text-align: center;
     background-color: #808080;
-    table-layout: fixed;
-    overflow: hidden;
 
+    overflow: hidden;
+}
+
+/* All table cells that are hovered over and do not have a mine or clicked class*/
+td:hover:not(.mine):not(.clicked) {
+    background-color: #969696;
 }
 
 .mine {
-    animation: 2s turnRed;
-    background-color: red;
+    transition: background-color 3s;
+    background-color: #ce1d1d;
 }
 
-.flag {
+img {
     width: 1em;
     height: 1em;
 }
 
 .clicked {
     background-color: #eaeaea;
-}
-
-@keyframes turnRed {
-    from {
-        background-color: #b1b1b1;
-    }
-
-    to {
-        background-color: red;
-    }
 }
 
 .count1 {
