@@ -1,12 +1,7 @@
 //A javascript implementation of Mine Sweeper
-//By Amir Afshar
-
 
 document.addEventListener("DOMContentLoaded", function() {
     board = document.getElementById("board");
-    totalRows = 9;
-    tilesPerRow = 9;
-    totalMines = 10;
     clickedClass = 'clicked';
     countClass = 'count';
 
@@ -19,12 +14,9 @@ document.addEventListener("DOMContentLoaded", function() {
     mine.src = 'assets/mine.png';
     mine.alt = 'mine';
 
-    document.querySelector('button').addEventListener("click", startGame);
+    button = document.querySelector('button');
+    button.addEventListener("click", startGame);
 });
-
-
-
-
 
 
 
@@ -35,18 +27,31 @@ document.addEventListener("DOMContentLoaded", function() {
 function startGame() {
 
     //Array content is reset at the start of every game
+    button.textContent = "Start New Game";
+    gameOver = false;
     rowsArray = [];
     board.innerHTML = '';
 
-    // totalRows = parseInt(document.getElementById('height').value);
-    // tilesPerRow = parseInt(document.getElementById('width').value);
-    // totalMines = parseInt(document.getElementById('mines').value);
+    //Checks to see if all the board parameters are within bounds
+    //If not a number or out of bounds a default value will be provided
+    totalRows = parseInt(document.getElementById('height').value);
+    if (isNaN(totalRows) ||totalRows < 1 || totalRows > 99)
+        totalRows = 9;
 
+    tilesPerRow = parseInt(document.getElementById('width').value);
+    if (isNaN(tilesPerRow) || tilesPerRow < 1 || tilesPerRow > 99)
+        tilesPerRow = 9;
+
+    totalMines = parseInt(document.getElementById('mines').value);
+    if (isNaN(totalMines) || totalMines < 1 || totalMines >= tilesPerRow*totalRows) {
+        totalMines = Math.floor(tilesPerRow * totalRows / 10);
+    }
+
+    remainingTiles = (tilesPerRow * totalRows) - totalMines;
 
     for (var i = 0; i < totalRows; i++)
         new Row();
 
-    console.log(rowsArray);
     addMines();
 }
 
@@ -68,6 +73,7 @@ function Tile(row) {
 
     var tile = this;
     this.element = document.createElement('td');
+    this.element.classList.add("fadeInDown")
     row.element.appendChild(this.element);
     // the number of mines adjacent to this tile
     this.adjacentMines = 0;
@@ -75,7 +81,7 @@ function Tile(row) {
     this.clicked = false;
     //Add the tile to an array of that row
     row.tilesArray.push(this);
-    this.row = row
+    this.row = row;
     this.index = row.tilesArray.length - 1;
     this.rowIndex = rowsArray.length -1;
 
@@ -96,20 +102,30 @@ function Tile(row) {
 
     this.click = function (event) {
         // Clicked tiles will not listen for flag or click events
-        tile.element.removeEventListener('contextmenu', tile.flag);
-        tile.element.removeEventListener('click', tile.click);
-        tile.clicked = true;
+        if (!gameOver) {
+            tile.element.removeEventListener('contextmenu', tile.flag);
+            tile.element.removeEventListener('click', tile.click);
+            tile.clicked = true;
 
-        if (tile.mine) {
-            //alert("boom");
-            tile.element.className = 'mine'
-            tile.element.appendChild(mine.cloneNode());
-        } else if (tile.adjacentMines == 0) {
-            tile.element.className = clickedClass;
-            clickAdjacentTiles(tile);
-        } else {
-            tile.element.className = clickedClass + ' ' + countClass + tile.adjacentMines.toString();
-            tile.element.textContent = tile.adjacentMines.toString();
+            if (tile.mine) {
+                tile.element.className = 'mine'
+                tile.element.appendChild(mine.cloneNode());
+                gameOver = true;
+                button.textContent = "Game Over";
+            } else if (tile.adjacentMines == 0) {
+                tile.element.className = clickedClass;
+                remainingTiles--;
+                clickAdjacentTiles(tile);
+            } else {
+                tile.element.className = clickedClass + ' ' + countClass + tile.adjacentMines.toString();
+                tile.element.textContent = tile.adjacentMines.toString();
+                remainingTiles--;
+            }
+
+            if (remainingTiles === 0) {
+                button.textContent = "You Win";
+                gameOver = true;
+            }
         }
     }
 
@@ -163,17 +179,12 @@ function addMines() {
     var tile;
 
     while(minesLeft != 0) {
-        //testing
-        console.log(tile);
-
         //Randomly places mines in tiles that do not already have a mine
         tile = rowsArray[Math.floor(Math.random() * totalRows)].tilesArray[Math.floor(Math.random() * tilesPerRow)];
         if(!tile.mine) {
             tile.mine = true;
             minesLeft--;
             tile.proximityCount();
-            //testing purposes
-            //tile.element.className = "mine";
         }
     }
 }

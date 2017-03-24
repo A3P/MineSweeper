@@ -8,18 +8,15 @@ h1 {
     font-size: 4em;
     color: #eaeaea;
     letter-spacing: 0.1em;
+    text-transform: uppercase;
 }
 
 
 table {
     /*border-spacing: 0px;*/
     table-layout: fixed;
-    width: 50px;
-    max-width: 50px;
-    height: 50px;
-    max-height: 50px;
     font-weight: bold;
-    margin: 0 auto;
+    margin: 20px auto;
     font-size: 2em;
 }
 
@@ -29,19 +26,38 @@ tr {
 
 td {
     table-layout: fixed;
-    height: 50px;
-    max-height: 50px;
-    width: 50px;
-    max-width: 50px;
+    height: 2em;
+    max-height: 2em;
+    width: 2em;
+    max-width: 2em;
     border: 1px solid black;
     margin: 0;
     padding: 0;
     text-align: center;
     background-color: #808080;
-
     overflow: hidden;
 }
 
+.fadeInDown {
+    opacity: 0;
+    animation-name: fadeInDown;
+    webkit-animation-name: fadeinDown;
+    animation-duration: 1s;
+    webkit-animation-duration: 1s;
+    animation-fill-mode: both;
+    webkit-animation-fill-mode: both;
+}
+
+@keyframes fadeInDown {
+    0% {
+        transform: translate3d(0, 20px, 0);
+    }
+
+    100% {
+        transform: translate3d(0,0,0);
+        opacity: 1;
+    }
+}
 /* All table cells that are hovered over and do not have a mine or clicked class*/
 td:hover:not(.mine):not(.clicked) {
     background-color: #969696;
@@ -56,6 +72,37 @@ img {
     width: 1em;
     height: 1em;
 }
+
+input {
+    background-color: black;
+    color: white;
+    font: inherit;
+    text-align: center;
+    border-color: white;
+    font-size: 1.5em;
+    width: 4em;
+}
+
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 5px 10px;
+    font: inherit;
+    color: white;
+    font-size: 2em;
+    background-color: black;
+    border: solid white 2px;
+    border-radius: 3px;
+    letter-spacing: 0.1em;
+    transition: all 0.5s ease;
+
+}
+
+
+button:hover {
+    border: solid #525151 2px;
+}
+
 
 .clicked {
     background-color: #eaeaea;
@@ -78,17 +125,17 @@ img {
 }
 
 .count5 {
-    color: ;
+    color: #2E0F2E;
 }
 
 .count6 {
-    color: ;
+    color: #1F1330;
 }
 
 .count7 {
-    color: ;
+    color: #474317 ;
 }
 
 .count8 {
-    color: ;
+    color: #3C4416;
 }

@@ -1,16 +1,17 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
+        <meta charset="utf-8">
         <title>MineSweeper</title>
         <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
         <script src="assets/script.js"></script>
         <link href="assets/style.css" rel="stylesheet">
     </head>
     <body>
-        <h1>Mine Sweeper</h1>
-        <input id="height">
-        <input id="width">
-        <input id="mines">
+        <h1>mine sweeper</h1>
+        <input id="height" placeholder="Height" type="number" min="1" max="99" maxlength="2">
+        <input id="width"  placeholder="Width" type="number" min="1" max="99" maxlength="2">
+        <input id="mines" placeholder="Mines" type="number" min="1" max="99" maxlength="2">
         <button id="startNewGame">Start New Game</button>
         <table id="board">
         </table>
